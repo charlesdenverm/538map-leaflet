@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaflet Map - 538 Dormitel and Churches</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.css"
+    />
+
+    <style>
+      .leaflet-control-custom.home-button {
+        background-color: #2a794e;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        cursor: pointer;
+        border-radius: 1px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .map-container {
+        width: 80%;
+        max-width: 200vh;
+        margin: 0 auto;
+        aspect-ratio: 16 / 9;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background: white;
+        position: relative;
+      }
+
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-toggle-button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .map-toggle-button.activated {
+        background-color: #2a794e;
+      }
+
+      .leaflet-top.leaflet-right {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .toggle-icon {
+        width: 29px;
+        height: 29px;
+      }
+      .map-toggle-button {
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: white;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .map-toggle-button:hover {
+        background: #e0e0e0;
+      }
+
+      .map-toggle-button.activated {
+        background: #164029;
+      }
+      .leaflet-control.basemap-toggle {
+        background: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: Arial, sans-serif;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e6e6e6;
+        border-radius: 26px;
+        transition: 0.4s;
+      }
+      .slider img {
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        top: 4px;
+        left: 4px;
+        transition: transform 0.4s ease, left 0.4s ease;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .switch input:checked + .slider {
+        background-color: #cccccc;
+      }
+      .switch input:checked + .slider:before {
+        transform: translateX(24px);
+      }
+
+      .no-select {
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        outline: none;
+      }
+      @media (max-width: 768px) {
+        .map-container {
+          max-width: 100vw;
+          aspect-ratio: auto;
+          height: 80vh;
+          border-radius: 0;
+          border: none;
+        }
+      }
+      @media (max-width: 480px) {
+        .map-toggle-button {
+          padding: 4px 6px;
+          gap: 4px;
+        }
+        .leaflet-control-attribution {
+          font-size: 10px;
+          padding: 2px 4px;
+          background: rgba(255, 255, 255, 0.7);
+          max-width: 90vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .toggle-icon {
+          width: 20px;
+          height: 20px;
+        }
+
+        .leaflet-control.basemap-toggle {
+          padding: 4px 8px;
+          gap: 6px;
+          font-size: 0.8em;
+        }
+
+        .switch {
+          width: 40px;
+          height: 22px;
+        }
+
+        .slider img {
+          height: 14px;
+          width: 14px;
+          top: 4px;
+          left: 4px;
+        }
+        .leaflet-top.leaflet-right {
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 1px;
+        }
+
+        .map-toggle-button,
+        .leaflet-control.basemap-toggle {
+          width: auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.js"></script>
+    <script src="js/coords.js"></script>
+
+    <script>
+      const manilaBounds = L.latLngBounds(
+        L.latLng(14.45, 120.85),
+        L.latLng(14.8, 121.1)
+      );
+      const map = L.map("map", {
+        doubleClickZoom: false,
+        fullscreenControl: true,
+        maxBounds: manilaBounds,
+        maxBoundsViscosity: 1.0,
+      }).setView([14.600523031817254, 120.98263909832248], 15);
+
+      const cartoVoyager = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        {
+          attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: "abcd",
+          maxZoom: 19,
+          minZoom: 12,
+        }
+      );
+
+      const esriImagery = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution: "Tiles &copy; Esri — Source: Esri, Maxar, Earthstar",
+          maxZoom: 19,
+          minZoom: 12,
+        }
+      );
+
+      cartoVoyager.addTo(map);
+
+      const BasemapToggleControl = L.Control.extend({
+        options: { position: "bottomleft" },
+
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control basemap-toggle"
+          );
+          container.innerHTML = `
+      <label class="switch">
+        <input type="checkbox" id="basemapSwitch">
+        <span class="slider">
+          <img id="basemapIcon" class="no-select" src="earth.svg" alt="Earth Icon draggable="false"
+  oncontextmenu="return false;"
+  style="pointer-events: none;"" />
+        </span>
+      </label>
+      <span id="basemap-label">🗺️ Map </span>
+    `;
+
+          L.DomEvent.disableClickPropagation(container);
+
+          const checkbox = container.querySelector("#basemapSwitch");
+          const img = container.querySelector("#basemapIcon");
+          const label = container.querySelector("#basemap-label");
+
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              map.removeLayer(cartoVoyager);
+              map.addLayer(esriImagery);
+              img.src = "earth_realistic.svg";
+              img.style.left = "28px";
+              label.innerText = "🌍 Satellite";
+            } else {
+              map.removeLayer(esriImagery);
+              map.addLayer(cartoVoyager);
+              img.src = "earth.svg";
+              img.style.left = "4px";
+              label.innerText = "🗺️ Map";
+            }
+          });
+
+          return container;
+        },
+      });
+
+      const dormitelIcon = L.icon({
+        iconUrl: "dormitel pin.png",
+        iconSize: [64, 40],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      const churchIcon = L.icon({
+        iconUrl: "church.svg",
+        iconSize: [32, 48],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+      const mosqueIcon = L.icon({
+        iconUrl: "mosque.svg",
+        iconSize: [32, 48],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      const laundromatIcon = L.icon({
+        iconUrl: "laundromats.svg",
+        iconSize: [32, 48],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      const convenienceStoreIcon = L.icon({
+        iconUrl: "convenience_stores.svg",
+        iconSize: [32, 48],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      const pharmacyIcon = L.icon({
+        iconUrl: "pharmacy.svg",
+        iconSize: [32, 48],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      L.marker([14.600523031817254, 120.98263909832248], {
+        icon: dormitelIcon,
+      }).addTo(map).bindPopup(`
+        <div style="text-align:center; max-width: 200px;">
+          <img src="dormitel-photo.png" alt="538 Dormitel" style="width:100%; border-radius: 8px; margin-bottom: 8px;" />
+          <h4 style="margin: 0;">538 Dormitel</h4>
+          <p style="margin: 4px 0 0; font-size: 0.9em; color: #333;">
+            The newest boutique dormitory centrally located a few minutes away from top universities in Manila.
+          </p>
+        </div>
+      `);
+
+      const HomeButtonControl = L.Control.extend({
+        options: {
+          position: "topleft",
+        },
+        onAdd: function (map) {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-bar leaflet-control leaflet-control-custom home-button"
+          );
+          container.title = "Back to Dormitel";
+
+          const icon = L.DomUtil.create("img", "", container);
+          icon.src = "dormitelicon.png";
+          icon.alt = "Home";
+          icon.style.width = "100%";
+          icon.style.height = "100%";
+          icon.style.objectFit = "cover";
+
+          container.onclick = function () {
+            map.setView([14.600523031817254, 120.98263909832248], 15);
+          };
+
+          container.addEventListener("mouseenter", () => {
+            icon.src = "dormitelicon2.png";
+          });
+          container.addEventListener("mouseleave", () => {
+            icon.src = "dormitelicon.png";
+          });
+
+          return container;
+        },
+      });
+      let churchMarkers = [];
+
+      const ToggleChurchesControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button" title="Toggle Churches and Mosques">
+    <img src="mosquexchurch.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (churchMarkers.length === 0) {
+              churches.forEach((place) => {
+                const icon = place.type === "Islamic" ? mosqueIcon : churchIcon;
+                const marker = L.marker(place.coords, { icon: icon })
+                  .addTo(map)
+                  .bindPopup(`<b>${place.name}</b><br>${place.type}`);
+                churchMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="mosquexchurch_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div> <!--hide--> 
+`;
+            } else {
+              churchMarkers.forEach((marker) => map.removeLayer(marker));
+              churchMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="mosquexchurch.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let laundromatMarkers = [];
+      const ToggleLaundromatsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="laundromats.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (laundromatMarkers.length === 0) {
+              laundromats.forEach((laundry) => {
+                const marker = L.marker(laundry.coords, {
+                  icon: laundromatIcon,
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${laundry.name}</b>`);
+                laundromatMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="laundromats_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              laundromatMarkers.forEach((marker) => map.removeLayer(marker));
+              laundromatMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="laundromats.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let ConvenienceStoresMarkers = [];
+      const ToggleConvenienceStoresControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (ConvenienceStoresMarkers.length === 0) {
+              convenienceStores.forEach((store) => {
+                const marker = L.marker(store.coords, {
+                  icon: convenienceStoreIcon,
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${store.name}</b>`);
+                ConvenienceStoresMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="CONVENIENCE_STORES_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              ConvenienceStoresMarkers.forEach((marker) =>
+                map.removeLayer(marker)
+              );
+              ConvenienceStoresMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let PharmacyMarkers = [];
+      const TogglePharmacyControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="pharmacy.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (PharmacyMarkers.length === 0) {
+              pharmacies.forEach((pharmacy) => {
+                const marker = L.marker(pharmacy.coords, {
+                  icon: pharmacyIcon,
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${pharmacy.name}</b>`);
+                PharmacyMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="pharmacy_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              PharmacyMarkers.forEach((marker) => map.removeLayer(marker));
+              PharmacyMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="pharmacy.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let CoffeeShopMarkers = [];
+      const ToggleCoffeeShopsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="coffeeshops.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (CoffeeShopMarkers.length === 0) {
+              coffeeshops.forEach((shop) => {
+                const marker = L.marker(shop.coords, {
+                  icon: L.icon({
+                    iconUrl: "coffeeshops.svg",
+                    iconSize: [32, 48],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32],
+                  }),
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${shop.name}</b>`);
+                CoffeeShopMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="coffeeshops_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              CoffeeShopMarkers.forEach((marker) => map.removeLayer(marker));
+              CoffeeShopMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="coffeeshops.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let MallMarkers = [];
+      const ToggleMallsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="malls.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (MallMarkers.length === 0) {
+              malls.forEach((mall) => {
+                const marker = L.marker(mall.coords, {
+                  icon: L.icon({
+                    iconUrl: "malls.svg",
+                    iconSize: [32, 48],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32],
+                  }),
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${mall.name}</b>`);
+                MallMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="malls_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              MallMarkers.forEach((marker) => map.removeLayer(marker));
+              MallMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="malls.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let SchoolMarkers = [];
+      const ToggleSchoolsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="schools.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (SchoolMarkers.length === 0) {
+              schools.forEach((school) => {
+                const marker = L.marker(school.coords, {
+                  icon: L.icon({
+                    iconUrl: "schools.svg",
+                    iconSize: [32, 48],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32],
+                  }),
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${school.name}</b>`);
+                SchoolMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="schools_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              SchoolMarkers.forEach((marker) => map.removeLayer(marker));
+              SchoolMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="schools.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let attractionMarkers = [];
+
+      const ToggleAttractionsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="TAs.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (attractionMarkers.length === 0) {
+              attractions.forEach((item) => {
+                const icon = L.icon({
+                  iconUrl: item.iconUrl,
+                  iconSize: [40, 40],
+                  iconAnchor: [20, 40],
+                  popupAnchor: [0, -36],
+                });
+
+                const popupContent = `
+            <div style="max-width:220px;">
+              <img src="${item.image}" alt="${item.name}" style="width:100%;border-radius:6px;">
+              <h4 style="margin:8px 0 4px;">${item.name}</h4>
+              <p style="margin:0;">${item.description}</p>
+            </div>
+          `;
+
+                const marker = L.marker(item.coords, { icon })
+                  .addTo(map)
+                  .bindPopup(popupContent);
+
+                attractionMarkers.push(marker);
+              });
+
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="TAs_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              attractionMarkers.forEach((marker) => map.removeLayer(marker));
+              attractionMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="Tas.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      let RestaurantMarkers = [];
+      const ToggleRestaurantsControl = L.Control.extend({
+        options: { position: "topright" },
+        onAdd: function () {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control custom-toggle"
+          );
+          container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="restaurants.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+
+          L.DomEvent.on(container, "click", function () {
+            if (RestaurantMarkers.length === 0) {
+              restaurants.forEach((restaurant) => {
+                const marker = L.marker(restaurant.coords, {
+                  icon: L.icon({
+                    iconUrl: "restaurants.svg",
+                    iconSize: [32, 48],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32],
+                  }),
+                })
+                  .addTo(map)
+                  .bindPopup(`<b>${restaurant.name}</b>`);
+                RestaurantMarkers.push(marker);
+              });
+              container.innerHTML = `
+  <div class="map-toggle-button activated">
+    <img src="restaurants_inverse.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            } else {
+              RestaurantMarkers.forEach((marker) => map.removeLayer(marker));
+              RestaurantMarkers = [];
+              container.innerHTML = `
+  <div class="map-toggle-button">
+    <img src="restaurants.svg" alt="Icon" class="toggle-icon" />
+  </div>
+`;
+            }
+          });
+
+          return container;
+        },
+      });
+
+      map.addControl(new HomeButtonControl());
+      map.addControl(new BasemapToggleControl());
+
+      map.addControl(new ToggleAttractionsControl());
+      map.addControl(new ToggleSchoolsControl());
+      map.addControl(new ToggleChurchesControl());
+      map.addControl(new ToggleMallsControl());
+      map.addControl(new ToggleRestaurantsControl());
+      map.addControl(new ToggleCoffeeShopsControl());
+      map.addControl(new ToggleConvenienceStoresControl());
+      map.addControl(new ToggleLaundromatsControl());
+      map.addControl(new TogglePharmacyControl());
+    </script>
+  </body>
+</html>
