@@ -20,6 +20,9 @@
   <body>
     <div class="map-container">
       <div id="map"></div>
+      <div id="zoom-hint" class="zoom-overlay">
+        <div class="zoom-text cookie-text">Hold Ctrl + scroll to zoom the map</div>
+      </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -36,6 +39,7 @@
         fullscreenControl: true,
         maxBounds: manilaBounds,
         maxBoundsViscosity: 1.0,
+        scrollWheelZoom: false,
       }).setView([14.600523031817254, 120.98263909832248], 15);
 
       const cartoVoyager = L.tileLayer(
@@ -56,8 +60,27 @@
           minZoom: 12,
         }
       );
-
-      cartoVoyager.addTo(map);
+    
+    cartoVoyager.addTo(map);
+    
+    const mapContainer = map.getContainer();
+    const zoomHint = document.getElementById("zoom-hint");
+    let zoomHintTimeout = null;
+    
+    map.getContainer().addEventListener("wheel", function (e) {
+      if (e.ctrlKey) {
+        map.scrollWheelZoom.enable();
+        e.preventDefault();
+      } else {
+        map.scrollWheelZoom.disable();
+        zoomHint.classList.add("show");
+    
+        clearTimeout(zoomHintTimeout);
+        zoomHintTimeout = setTimeout(() => {
+          zoomHint.classList.remove("show");
+        }, 2000);
+      }
+    }, { passive: false });
 
       const BasemapToggleControl = L.Control.extend({
         options: { position: "bottomleft" },
