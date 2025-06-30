@@ -696,150 +696,150 @@ const attractions = [
     coords: [14.599895138413796, 120.980317203486],
     description:
       "The Carriedo Fountain in Quiapo is a historic landmark built to honor Don Francisco Carriedo",
-    image: "carriedo_fountain.png",
-    iconUrl: "fountain.svg",
+    image: "images/attractions/carriedo_fountain.png",
+    iconUrl: "images/svgs/fountain.svg",
   },
   {
     name: "Wellmanson Beads & Accessories",
     coords: [14.597433811853081, 120.98311874314702],
     description:
       "A national park dedicated to the country's national hero, José Rizal.",
-    image: "wellmanson.png",
-    iconUrl: "giftshop.svg",
+    image: "images/attractions/wellmanson.png",
+    iconUrl: "images/svgs/giftshop.svg",
   },
   {
     name: "Fort Santiago",
     coords: [14.594236157358875, 120.97042172824308],
     description: "A historic Spanish fortress located in Intramuros, Manila.",
-    image: "fort_santiago.jpg",
-    iconUrl: "baluarte.svg",
+    image: "images/attractions/fort_santiago.jpg",
+    iconUrl: "images/svgs/baluarte.svg",
   },
   {
     name: "Jones Bridge",
     coords: [14.595807524619854, 120.97722419240259],
     description:
       "A historic bridge in Manila that connects the districts of Binondo and Intramuros.",
-    image: "jones_bridge.jpg",
-    iconUrl: "bridge.svg",
+    image: "images/attractions/jones_bridge.jpg",
+    iconUrl: "images/svgs/bridge.svg",
   },
   {
     name: "Binondo Chinatown Arch",
     coords: [14.59715240220981, 120.97631047462443],
     description:
       "The oldest Chinatown in the world, known for its rich history and vibrant culture.",
-    image: "binondo_arch.jpg",
-    iconUrl: "arch.svg",
+    image: "images/attractions/binondo_arch.jpg",
+    iconUrl: "images/svgs/arch.svg",
   },
   {
     name: "Rizal Monument",
     coords: [14.581815764676765, 120.97692187488477],
     description:
       "A national park dedicated to the country's national hero, José Rizal.",
-    image: "rizal_monument.jpg",
-    iconUrl: "monument.svg",
+    image: "images/attractions/rizal_monument.jpg",
+    iconUrl: "images/svgs/monument.svg",
   },
   {
     name: "Doña Teodora Alonzo Monument",
     coords: [14.598897238411057, 120.97237944879532],
     description:
       "A monument dedicated to Doña Teodora Alonzo, the mother of José Rizal.",
-    image: "tahanan_ng_kaanak_ni_rizal.jpg",
-    iconUrl: "tombstone.svg",
+    image: "images/attractions/tahanan_ng_kaanak_ni_rizal.jpg",
+    iconUrl: "images/svgs/tombstone.svg",
   },
   {
     name: "Arroceros Forest Park",
     coords: [14.59423912660099, 120.98171942845696],
     description:
       "A small urban forest park in Manila, providing a green space in the city.",
-    image: "arroceros.jpg",
-    iconUrl: "park.svg",
+    image: "images/attractions/arroceros.jpg",
+    iconUrl: "images/svgs/park.svg",
   },
   {
     name: "Liwasang Bonificacio",
     coords: [14.594576932403891, 120.97936886621562],
     description:
       "A public square in Manila named after Andres Bonifacio, a national hero.",
-    image: "liwasang_bonifacio.jpg",
-    iconUrl: "liwasan.svg",
+    image: "images/attractions/liwasang_bonifacio.jpg",
+    iconUrl: "images/svgs/liwasan.svg",
   },
   {
     name: "The Metropolitan Theater",
     coords: [14.593955248019805, 120.98051870359816],
     description:
       "A historic theater in Manila known for its Art Deco architecture.",
-    image: "metropolitan_theater.png",
-    iconUrl: "theater.svg",
+    image: "images/attractions/metropolitan_theater.png",
+    iconUrl: "images/svgs/theater.svg",
   },
   {
     name: "El Hogar Filipino Building",
     coords: [14.596182046454686, 120.97570957315645],
     description:
       "A historic building in Manila known for its unique architecture.",
-    image: "el_hogar.jpg",
-    iconUrl: "building.svg",
+    image: "images/attractions/el_hogar.jpg",
+    iconUrl: "images/svgs/building.svg",
   },
   {
     name: "Plaza Calderón de la Barca (S. Lorenzo Ruiz)",
     coords: [14.600386760129258, 120.9737704352712],
     description:
       "A public square in Quiapo named after the Spanish playwright Pedro Antonio de Alarcón.",
-    image: "plaza_san_lorenzo.jpg",
-    iconUrl: "plaza.svg",
+    image: "images/attractions/plaza_san_lorenzo.jpg",
+    iconUrl: "images/svgs/plaza.svg",
   },
   {
     name: "Teus & Goldenberg Mansions",
     coords: [14.591789070389718, 120.98929721376277],
     description:
       "A historic mansion in Quiapo known for its architectural significance.",
-    image: "teus&goldenberg.png",
-    iconUrl: "mansion.svg",
+    image: "images/attractions/teus&goldenberg.png",
+    iconUrl: "images/svgs/mansion.svg",
   },
   {
     name: "Bahay Ugnayan",
     coords: [14.59286130141525, 120.99210038029945],
     description:
       "A cultural center in Quiapo that promotes Filipino heritage and arts.",
-    image: "bahay_ugnayan.jpg",
-    iconUrl: "bahay.svg",
+    image: "images/attractions/bahay_ugnayan.jpg",
+    iconUrl: "images/svgs/bahay.svg",
   },
   {
     name: "Malacañang Palace",
     coords: [14.593924493738141, 120.99450430202418],
     description:
       "The official residence and principal workplace of the President of the Philippines.",
-    image: "malacanang.png",
-    iconUrl: "palace.svg",
+    image: "images/attractions/malacanang.png",
+    iconUrl: "images/svgs/palace.svg",
   },
   {
     name: "Hospicio de San Jose",
     coords: [14.590715469093837, 120.98791719253742],
     description:
       "A historic orphanage and care facility in Manila, providing shelter and support to children.",
-    image: "hospicio_de_san_jose.jpeg",
-    iconUrl: "orphanage.svg",
+    image: "images/attractions/hospicio_de_san_jose.jpeg",
+    iconUrl: "images/svgs/orphanage.svg",
   },
   {
     name: "Bahay Nakpil-Bautista",
     coords: [14.598401248975293, 120.98477549272006],
     description:
       "A historic house museum in Quiapo that showcases the life and contributions of Filipino heroes.",
-    image: "bahay_nakpil.jpg",
-    iconUrl: "bahay2.svg",
+    image: "images/attractions/bahay_nakpil.jpg",
+    iconUrl: "images/svgs/bahay2.svg",
   },
   {
     name: "Quinta Market",
     coords: [14.59632200331403, 120.98249064052318],
     description:
       "A bustling market in Quiapo known for its fresh produce, local goods, and vibrant atmosphere.",
-    image: "quinta_market.jpg",
-    iconUrl: "market.svg",
+    image: "images/attractions/quinta_market.jpg",
+    iconUrl: "images/svgs/market.svg",
   },
   {
     name: "Ongpin Tower",
     coords: [14.600863851814118, 120.98008048980395],
     description:
       "A prominent commercial building in Binondo, known for its shopping and dining options.",
-    image: "ongpin_tower.png",
-    iconUrl: "tower.svg",
+    image: "images/attractions/ongpin_tower.png",
+    iconUrl: "images/svgs/tower.svg",
   },
 ];

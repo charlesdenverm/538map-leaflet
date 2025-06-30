@@ -14,197 +14,8 @@
       href="https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.css"
     />
 
-    <style>
-      .leaflet-control-custom.home-button {
-        background-color: #2a794e;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        cursor: pointer;
-        border-radius: 1px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-
-      .map-container {
-        width: 80%;
-        max-width: 200vh;
-        margin: 0 auto;
-        aspect-ratio: 16 / 9;
-        border: 2px solid #ccc;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background: white;
-        position: relative;
-      }
-
-      #map {
-        width: 100%;
-        height: 100%;
-      }
-
-      .map-toggle-button {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .map-toggle-button.activated {
-        background-color: #2a794e;
-      }
-
-      .leaflet-top.leaflet-right {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-      }
-
-      .toggle-icon {
-        width: 29px;
-        height: 29px;
-      }
-      .map-toggle-button {
-        padding: 6px 8px;
-        border-radius: 6px;
-        background: white;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        transition: background 0.3s ease;
-      }
-
-      .map-toggle-button:hover {
-        background: #e0e0e0;
-      }
-
-      .map-toggle-button.activated {
-        background: #164029;
-      }
-      .leaflet-control.basemap-toggle {
-        background: white;
-        padding: 6px 12px;
-        border-radius: 8px;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-family: Arial, sans-serif;
-      }
-
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 26px;
-      }
-
-      .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-      .slider {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #e6e6e6;
-        border-radius: 26px;
-        transition: 0.4s;
-      }
-      .slider img {
-        position: absolute;
-        height: 18px;
-        width: 18px;
-        top: 4px;
-        left: 4px;
-        transition: transform 0.4s ease, left 0.4s ease;
-        border-radius: 50%;
-        pointer-events: none;
-      }
-      .switch input:checked + .slider {
-        background-color: #cccccc;
-      }
-      .switch input:checked + .slider:before {
-        transform: translateX(24px);
-      }
-
-      .no-select {
-        user-select: none;
-        -webkit-user-drag: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        outline: none;
-      }
-      @media (max-width: 768px) {
-        .map-container {
-          max-width: 100vw;
-          aspect-ratio: auto;
-          height: 80vh;
-          border-radius: 0;
-          border: none;
-        }
-      }
-      @media (max-width: 480px) {
-        .map-toggle-button {
-          padding: 4px 6px;
-          gap: 4px;
-        }
-        .leaflet-control-attribution {
-          font-size: 10px;
-          padding: 2px 4px;
-          background: rgba(255, 255, 255, 0.7);
-          max-width: 90vw;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .toggle-icon {
-          width: 20px;
-          height: 20px;
-        }
-
-        .leaflet-control.basemap-toggle {
-          padding: 4px 8px;
-          gap: 6px;
-          font-size: 0.8em;
-        }
-
-        .switch {
-          width: 40px;
-          height: 22px;
-        }
-
-        .slider img {
-          height: 14px;
-          width: 14px;
-          top: 4px;
-          left: 4px;
-        }
-        .leaflet-top.leaflet-right {
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 1px;
-        }
-
-        .map-toggle-button,
-        .leaflet-control.basemap-toggle {
-          width: auto;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
+    
   </head>
   <body>
     <div class="map-container">
@@ -260,7 +71,7 @@
       <label class="switch">
         <input type="checkbox" id="basemapSwitch">
         <span class="slider">
-          <img id="basemapIcon" class="no-select" src="earth.svg" alt="Earth Icon draggable="false"
+          <img id="basemapIcon" class="no-select" src="images/svgs/earth.svg" alt="Earth Icon draggable="false"
   oncontextmenu="return false;"
   style="pointer-events: none;"" />
         </span>
@@ -278,13 +89,13 @@
             if (this.checked) {
               map.removeLayer(cartoVoyager);
               map.addLayer(esriImagery);
-              img.src = "earth_realistic.svg";
+              img.src = "images/svgs/earth_realistic.svg";
               img.style.left = "28px";
               label.innerText = "🌍 Satellite";
             } else {
               map.removeLayer(esriImagery);
               map.addLayer(cartoVoyager);
-              img.src = "earth.svg";
+              img.src = "images/svgs/earth.svg";
               img.style.left = "4px";
               label.innerText = "🗺️ Map";
             }
@@ -295,41 +106,41 @@
       });
 
       const dormitelIcon = L.icon({
-        iconUrl: "dormitel pin.png",
+        iconUrl: "images/dormitel pin.png",
         iconSize: [64, 40],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
 
       const churchIcon = L.icon({
-        iconUrl: "church.svg",
+        iconUrl: "images/svgs/church.svg",
         iconSize: [32, 48],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
       const mosqueIcon = L.icon({
-        iconUrl: "mosque.svg",
+        iconUrl: "images/svgs/mosque.svg",
         iconSize: [32, 48],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
 
       const laundromatIcon = L.icon({
-        iconUrl: "laundromats.svg",
+        iconUrl: "images/svgs/laundromats.svg",
         iconSize: [32, 48],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
 
       const convenienceStoreIcon = L.icon({
-        iconUrl: "convenience_stores.svg",
+        iconUrl: "images/svgs/convenience_stores.svg",
         iconSize: [32, 48],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
 
       const pharmacyIcon = L.icon({
-        iconUrl: "pharmacy.svg",
+        iconUrl: "images/svgs/pharmacy.svg",
         iconSize: [32, 48],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
@@ -339,7 +150,7 @@
         icon: dormitelIcon,
       }).addTo(map).bindPopup(`
         <div style="text-align:center; max-width: 200px;">
-          <img src="dormitel-photo.png" alt="538 Dormitel" style="width:100%; border-radius: 8px; margin-bottom: 8px;" />
+          <img src="images/dormitel-photo.png" alt="538 Dormitel" style="width:100%; border-radius: 8px; margin-bottom: 8px;" />
           <h4 style="margin: 0;">538 Dormitel</h4>
           <p style="margin: 4px 0 0; font-size: 0.9em; color: #333;">
             The newest boutique dormitory centrally located a few minutes away from top universities in Manila.
@@ -359,7 +170,7 @@
           container.title = "Back to Dormitel";
 
           const icon = L.DomUtil.create("img", "", container);
-          icon.src = "dormitelicon.png";
+          icon.src = "images/dormitelicon.png";
           icon.alt = "Home";
           icon.style.width = "100%";
           icon.style.height = "100%";
@@ -370,10 +181,10 @@
           };
 
           container.addEventListener("mouseenter", () => {
-            icon.src = "dormitelicon2.png";
+            icon.src = "images/dormitelicon2.png";
           });
           container.addEventListener("mouseleave", () => {
-            icon.src = "dormitelicon.png";
+            icon.src = "images/dormitelicon.png";
           });
 
           return container;
@@ -390,7 +201,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button" title="Toggle Churches and Mosques">
-    <img src="mosquexchurch.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/mosquexchurch.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -405,7 +216,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="mosquexchurch_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/mosquexchurch_inverse.svg" alt="Icon" class="toggle-icon" />
   </div> <!--hide--> 
 `;
             } else {
@@ -413,7 +224,7 @@
               churchMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="mosquexchurch.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/mosquexchurch.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -433,7 +244,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="laundromats.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/laundromats.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -449,7 +260,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="laundromats_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/laundromats_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -457,7 +268,7 @@
               laundromatMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="laundromats.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/laundromats.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -477,7 +288,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -493,7 +304,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="CONVENIENCE_STORES_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/CONVENIENCE_STORES_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -503,7 +314,7 @@
               ConvenienceStoresMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/CONVENIENCE_STORES.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -523,7 +334,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="pharmacy.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/pharmacy.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -539,7 +350,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="pharmacy_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/pharmacy_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -547,7 +358,7 @@
               PharmacyMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="pharmacy.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/pharmacy.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -567,7 +378,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="coffeeshops.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/coffeeshops.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -576,7 +387,7 @@
               coffeeshops.forEach((shop) => {
                 const marker = L.marker(shop.coords, {
                   icon: L.icon({
-                    iconUrl: "coffeeshops.svg",
+                    iconUrl: "images/svgs/coffeeshops.svg",
                     iconSize: [32, 48],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32],
@@ -588,7 +399,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="coffeeshops_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/coffeeshops_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -596,7 +407,7 @@
               CoffeeShopMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="coffeeshops.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/coffeeshops.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -616,7 +427,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="malls.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/malls.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -625,7 +436,7 @@
               malls.forEach((mall) => {
                 const marker = L.marker(mall.coords, {
                   icon: L.icon({
-                    iconUrl: "malls.svg",
+                    iconUrl: "images/svgs/malls.svg",
                     iconSize: [32, 48],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32],
@@ -637,7 +448,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="malls_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/malls_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -645,7 +456,7 @@
               MallMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="malls.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/malls.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -665,7 +476,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="schools.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/schools.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -674,7 +485,7 @@
               schools.forEach((school) => {
                 const marker = L.marker(school.coords, {
                   icon: L.icon({
-                    iconUrl: "schools.svg",
+                    iconUrl: "images/svgs/schools.svg",
                     iconSize: [32, 48],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32],
@@ -686,7 +497,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="schools_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/schools_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -694,7 +505,7 @@
               SchoolMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="schools.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/schools.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -715,7 +526,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="TAs.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/TAs.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -746,7 +557,7 @@
 
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="TAs_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/TAs_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -754,7 +565,7 @@
               attractionMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="Tas.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/Tas.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
@@ -774,7 +585,7 @@
           );
           container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="restaurants.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/restaurants.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
 
@@ -783,7 +594,7 @@
               restaurants.forEach((restaurant) => {
                 const marker = L.marker(restaurant.coords, {
                   icon: L.icon({
-                    iconUrl: "restaurants.svg",
+                    iconUrl: "images/svgs/restaurants.svg",
                     iconSize: [32, 48],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32],
@@ -795,7 +606,7 @@
               });
               container.innerHTML = `
   <div class="map-toggle-button activated">
-    <img src="restaurants_inverse.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/restaurants_inverse.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             } else {
@@ -803,7 +614,7 @@
               RestaurantMarkers = [];
               container.innerHTML = `
   <div class="map-toggle-button">
-    <img src="restaurants.svg" alt="Icon" class="toggle-icon" />
+    <img src="images/svgs/restaurants.svg" alt="Icon" class="toggle-icon" />
   </div>
 `;
             }
